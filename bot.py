@@ -8,6 +8,8 @@ import commands.pihole as pi
 # create logger
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 
+command = conf.get_setting("bani-command", "bani")
+
 class MyClient(discord.Client):
     async def on_ready(self):
         logging.info(f"Successfully logged in as {self.user}")
@@ -17,13 +19,15 @@ class MyClient(discord.Client):
         if message.author == self.user:
             return
 
-        if not message.content.startswith("bani"):
+        if not message.content.startswith(command):
             return
+
+        cmd = message.content[len(command) + 1:]
 
         logging.info(f"{message.author.display_name} sent message: {message.content}")
         #---------------------------
 
-        if message.content == "bani pihole":
+        if cmd == "pihole":
             status = pi.get_pihole_status_json()
             status = status['status']
 
