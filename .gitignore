@@ -1,6 +1,7 @@
 # my own
 .vscode/
 config.json
+token
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

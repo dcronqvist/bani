@@ -1,8 +1,9 @@
+import json
 import discord
 from discord.message import Message
 import config as conf
-import requests
 import logging
+import commands.pihole as pi
 
 # create logger
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
@@ -20,10 +21,23 @@ class MyClient(discord.Client):
             return
 
         logging.info(f"{message.author.display_name} sent message: {message.content}")
+        #---------------------------
 
-        if message.author.display_name == "danc":
-            await message.channel.send('pong')
+        if message.content == "bani pihole":
+            status = pi.get_pihole_status_json()
+            status = status['status']
 
+            mess = f"""
+```json
+{status['dns_queries_today']} DNS queries today, where {status['ads_blocked_today']} were towards ads. 
+{round(status['ads_percentage_today'] * 10.0) / 10.0}% of all requests were towards ads.
+```
+"""
+            message.channel
+            await message.channel.send(mess)
+        
+
+        #----------------------------
         if "die" in message.content:
             client.close()
 
