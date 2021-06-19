@@ -10,6 +10,10 @@ logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 
 command = conf.get_setting("bani-command", "bani")
 
+cmds = {
+    "pihole": pi.get_pihole_status_json
+}
+
 class MyClient(discord.Client):
     async def on_ready(self):
         logging.info(f"Successfully logged in as {self.user}")
@@ -27,19 +31,10 @@ class MyClient(discord.Client):
         logging.info(f"{message.author.display_name} sent message: {message.content}")
         #---------------------------
 
-        if cmd == "pihole":
-            status = pi.get_pihole_status_json()
-            status = status['status']
+        run = cmds.get(cmd, None)
 
-            mess = f"""
-```json
-{status['dns_queries_today']} DNS queries today, where {status['ads_blocked_today']} were towards ads. 
-{round(status['ads_percentage_today'] * 10.0) / 10.0}% of all requests were towards ads.
-```
-"""
-            message.channel
-            await message.channel.send(mess)
-        
+        if run:
+            await run(message)
 
         #----------------------------
         if "die" in message.content:
