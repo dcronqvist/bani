@@ -20,7 +20,8 @@ def get_random_emoji():
         ":duck:",
         ":dodo:",
         ":bird:",
-        ":baby_chick:"
+        ":baby_chick:",
+        ":dog:"
     ])
 
 @ar.use_token
