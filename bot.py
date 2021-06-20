@@ -6,19 +6,15 @@ from discord.channel import TextChannel
 from discord.message import Message
 import config as conf
 import logging
-import commands.pihole as pi
 import discord.ext.commands as commands
 import random as rand
+from commands.pihole import get_pihole_status_json
+import commands.api_requests as ar
 
 # create logger
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
-
+version = "v0.2-alpha"
 command = conf.get_setting("bani-command", "bani")
-
-cmds = {
-    "pihole": pi.get_pihole_status_json
-}
-
 def get_random_emoji():
     return rand.choice([
         ":duck:",
@@ -27,7 +23,19 @@ def get_random_emoji():
         ":baby_chick:"
     ])
 
-version = "v0.1-alpha"
+@ar.use_token
+async def get_version(message):
+    mess = f"""
+`{command} is running version {version}!` {get_random_emoji()}
+"""
+    await message.channel.send(mess)
+
+cmds = {
+    "pihole": get_pihole_status_json,
+    "version": get_version
+}
+
+
 class MyClient(discord.Client):
 
     async def on_ready(self):

@@ -1,6 +1,9 @@
 import requests
 import commands.api_requests as ar
 import logging
+import config as conf
+
+command = conf.get_setting("bani-command", "bani")
 
 @ar.use_token
 async def get_pihole_status_json(message):
