@@ -44,7 +44,7 @@ class MyClient(discord.Client):
         for guild in self.guilds:
             for channel in guild.channels:
                 if type(channel) is TextChannel:
-                    if channel.permissions_for(channel.guild.me).send_messages == True:
+                    if channel.permissions_for(channel.guild.me).send_messages == True and command == "bani":
                         await channel.send(f"🤖 `{command}` is ready to go! running version `{version}` {get_random_emoji()}")
                         logging.info(f"Announced in {channel} in {guild}")
             
@@ -55,6 +55,10 @@ class MyClient(discord.Client):
             return
 
         if not message.content.startswith(command):
+            return
+
+        if not message.author.display_name == "dnl":
+            await message.channel.send("you are not dani!! shat ap!! >:(")
             return
 
         cmd = message.content[len(command) + 1:]
